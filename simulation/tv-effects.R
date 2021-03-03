@@ -1,8 +1,8 @@
 library(ggplot2)
 theme_set(theme_bw())
 library(batchtools)
-source("../benchmark/algorithms.R")
-load("../benchmark/pec_params.RData")
+source("C:/Users/TASD/Documents/GitHub/machine-learning-for-survival-ecml2020/benchmark/algorithms.R")
+load("C:/Users/TASD/Documents/GitHub/machine-learning-for-survival-ecml2020/benchmark/pec_params.RData")
 source("sim-funs.R")
 
 if(!checkmate::test_directory_exists("output/tve-registry")) {
