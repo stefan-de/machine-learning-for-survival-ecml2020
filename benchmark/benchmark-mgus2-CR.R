@@ -7,15 +7,30 @@ library(pem.xgb)
 library(survival)
 library(pec)
 library(prodlim)
-devtools::load_all("../")
+#devtools::load_all("../")
 
 ## functions to generate problem instances and wrappers for different algorithms
+
+setwd("C:/Users/TASD/Documents/GitHub/machine-learning-for-survival-ecml2020/benchmark")
 source("problems.R")
 source("algorithms.R")
 
 ## data sets + parameters
-benchmark_data <- readRDS("benchmark_data.Rds")
-load("pec_params.RData")
+
+data(follic, package = "randomForestSRC")
+data(hd, package = "randomForestSRC")
+data(wihs, package = "randomForestSRC")
+
+datasets <- list(follic = follic,
+                 hd = hd,
+                 wihs = wihs)
+
+pec_params <- list(
+  formula = Surv(time, status) ~ 1,
+  exact = FALSE,
+  start = 0.01)
+  
+  
 data = list(
   benchmark_data = benchmark_data,
   pec_params = pec_params
@@ -32,7 +47,9 @@ instances <- map(
     problem_wrapper(data, .x, "mgus2")
   })
 
-saveRDS(instances, "instances/mgus2.Rds")
+
+#saveRDS(instances, "C:/Users/TASD/Documents/GitHub/machine-learning-for-survival-ecml2020/instances/hd.Rds")
+
 library(furrr)
 plan("multicore")
 
@@ -51,7 +68,10 @@ res_xgb <- future_map(
     list(cause1 = cause1, cause2 = cause2)
   }
 )
-saveRDS(res_xgb, "instances/results/pred_mgus2.Rds")
+
+#saveRDS(res_xgb, "instances/results/pred_mgus2.Rds")
+
+
 
 # res_temp <- map(1:4, ~{
 #   inst <- instances[[.x]]
@@ -65,6 +85,7 @@ saveRDS(res_xgb, "instances/results/pred_mgus2.Rds")
 #   list(cause1 = cause1, cause2 = cause2)
 # })
 # saveRDS(res_temp, "instances/results/pred_mgus2_tmp.Rds")
+
 
 ## coxph
 res_csc <- purrr::map(

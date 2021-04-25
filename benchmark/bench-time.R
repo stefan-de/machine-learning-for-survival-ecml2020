@@ -8,8 +8,9 @@ library(prodlim)
 library(pem.xgb)
 
 ## functions to generate problem instances and wrappers for different algorithms
-source("../simulation/sim-funs.R")
-load("../benchmark/pec_params.RData")
+## setwd("C:/Users/TASD/Documents/GitHub/machine-learning-for-survival-ecml2020")
+source("./simulation/sim-funs.R")
+#load("./benchmark/pec_params.RData")
 pec_params <- list(
   formula = Surv(time, status) ~ 1,
   exact = FALSE,
@@ -172,9 +173,9 @@ saveRDS(instances, "instances/instances-sim-time.Rds")
 
 library(furrr)
 plan("multicore")
-options(mc.cores = 10)
+options(mc.cores = 3)
 res_400 <- future_map(instances400,
-    ~pam_xgb_wrapper_time(.x, budget = 10, nthread = 1L,
+    ~pam_xgb_wrapper(.x, budget = 10, nthread = 1L,
       pec_params = pec_params))
 
 saveRDS(res_400, "bench-time-400.Rds")
